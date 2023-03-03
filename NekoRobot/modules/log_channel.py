@@ -1,33 +1,6 @@
-"""
-BSD 2-Clause License
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2022-2023, Awesome-Prince, [ https://github.com/Awesome-Prince]
-Copyright (c) 2022-2023, Programmer Network, [ https://github.com/Awesome-Prince/NekoRobot-3 ]
-All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-
 from datetime import datetime
 from functools import wraps
-
 from telegram.ext import CallbackContext
-
 from NekoRobot.modules.helper_funcs.misc import is_module_loaded
 
 FILENAME = __name__.rsplit(".", 1)[-1]
@@ -35,10 +8,10 @@ FILENAME = __name__.rsplit(".", 1)[-1]
 if is_module_loaded(FILENAME):
     from telegram import ParseMode, Update
     from telegram.error import BadRequest, Unauthorized
-    from telegram.ext import CommandHandler, JobQueue
+    from telegram.ext import CommandHandler, JobQueue, run_async
     from telegram.utils.helpers import escape_markdown
 
-    from NekoRobot import EVENT_LOGS, LOGGER, NEKO_PTB
+    from NekoRobot import EVENT_LOGS, LOGGER, dispatcher
     from NekoRobot.modules.helper_funcs.chat_status import user_admin
     from NekoRobot.modules.sql import log_channel_sql as sql
 
@@ -51,11 +24,10 @@ if is_module_loaded(FILENAME):
             *args,
             **kwargs,
         ):
-            result = (
-                func(update, context, job_queue, *args, **kwargs)
-                if job_queue
-                else func(update, context, *args, **kwargs)
-            )
+            if not job_queue:
+                result = func(update, context, *args, **kwargs)
+            else:
+                result = func(update, context, job_queue, *args, **kwargs)
 
             chat = update.effective_chat
             message = update.effective_message
@@ -131,7 +103,8 @@ if is_module_loaded(FILENAME):
         message = update.effective_message
         chat = update.effective_chat
 
-        if log_channel := sql.get_chat_log_channel(chat.id):
+        log_channel = sql.get_chat_log_channel(chat.id)
+        if log_channel:
             log_channel_info = bot.get_chat(log_channel)
             message.reply_text(
                 f"This group has all it's logs sent to:"
@@ -157,7 +130,9 @@ if is_module_loaded(FILENAME):
             try:
                 message.delete()
             except BadRequest as excp:
-                if excp.message != "Message to delete not found":
+                if excp.message == "Message to delete not found":
+                    pass
+                else:
                     LOGGER.exception(
                         "Error deleting message in log channel. Should work anyway though."
                     )
@@ -189,7 +164,8 @@ if is_module_loaded(FILENAME):
         message = update.effective_message
         chat = update.effective_chat
 
-        if log_channel := sql.stop_chat_logging(chat.id):
+        log_channel = sql.stop_chat_logging(chat.id)
+        if log_channel:
             bot.send_message(
                 log_channel, f"Channel has been unlinked from {chat.title}"
             )
@@ -199,38 +175,41 @@ if is_module_loaded(FILENAME):
             message.reply_text("No log channel has been set yet!")
 
     def __stats__():
-        return f"• {sql.num_logchannels()} log channels set."
+        return f"× {sql.num_logchannels()} log channels set."
 
     def __migrate__(old_chat_id, new_chat_id):
         sql.migrate_chat(old_chat_id, new_chat_id)
 
     def __chat_settings__(chat_id, user_id):
-        if log_channel := sql.get_chat_log_channel(chat_id):
-            log_channel_info = NEKO_PTB.bot.get_chat(log_channel)
+        log_channel = sql.get_chat_log_channel(chat_id)
+        if log_channel:
+            log_channel_info = dispatcher.bot.get_chat(log_channel)
             return f"This group has all it's logs sent to: {escape_markdown(log_channel_info.title)} (`{log_channel}`)"
         return "No log channel is set for this group!"
 
     __help__ = """
-*Admins only:*
-• `/logchannel`*:* get log channel info
-• `/setlog`*:* set the log channel.
-• `/unsetlog`*:* unset the log channel.
+──「 Log channel 」──
 
-Setting the log channel is done by:
-• adding the bot to the desired channel (as an admin!)
-• sending `/setlog` in the channel
-• forwarding the `/setlog` to the group
+❂ /logchannel*:* get log channel info
+❂ /setlog*:* set the log channel.
+❂ /unsetlog*:* unset the log channel.
+
+*Setting the log channel is done by*:
+
+➩ adding the bot to the desired channel (as an admin!)
+➩ sending /setlog in the channel
+➩ forwarding the /setlog to the group
 """
 
-    __mod_name__ = "Log Channels"
+    __mod_name__ = "Log Channel​"
 
     LOG_HANDLER = CommandHandler("logchannel", logging, run_async=True)
     SET_LOG_HANDLER = CommandHandler("setlog", setlog, run_async=True)
     UNSET_LOG_HANDLER = CommandHandler("unsetlog", unsetlog, run_async=True)
 
-    NEKO_PTB.add_handler(LOG_HANDLER)
-    NEKO_PTB.add_handler(SET_LOG_HANDLER)
-    NEKO_PTB.add_handler(UNSET_LOG_HANDLER)
+    dispatcher.add_handler(LOG_HANDLER)
+    dispatcher.add_handler(SET_LOG_HANDLER)
+    dispatcher.add_handler(UNSET_LOG_HANDLER)
 
 else:
     # run anyway if module not loaded
