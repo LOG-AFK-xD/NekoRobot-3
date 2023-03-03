@@ -143,6 +143,7 @@ buttons = [
     [
         InlineKeyboardButton(text="⚒️ 𝐀ʟʟ 𝐂ᴏᴍᴍᴀɴᴅ𝐬 ⚒️", callback_data="help_back"),
     ],
+]
 
 HELP_STRINGS = """
 *Main* commands available:
