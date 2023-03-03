@@ -120,38 +120,29 @@ NEKO_STICKERS = (
 )
 
 PM_START_TEXT = """
-────「 [{}](https://telegra.ph/file/9996ec2eafdef4692102d.jpg) 」────
-*Hola! {},*
-*Meow Meow, Don't Touch Me Without My Permission!*
-➖➖➖➖➖➖➖➖➖➖➖➖➖
-❍ *Uptime:* `{}`
-❍ `{}` *Users, Across* `{}` *Chats.*
-➖➖➖➖➖➖➖➖➖➖➖➖➖
-➛ Try The Guidelines Button Below To Know My Abilities ××
+*𝐇ᴏʟᴀ {} !* [✨](https://telegra.ph/file/9996ec2eafdef4692102d.jpg)
+𝐈 𝐀ᴍ 𝐀ɴɪᴍᴇ ᴛʜᴇᴍᴇᴅ ᴀᴅᴠᴀɴᴄᴇ 𝐆ʀᴏᴜᴘ 𝐌ᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ 𝐀 ʟᴏᴛ ᴏғ ᴄᴏᴏʟ 𝐅ᴇᴀᴛᴜʀᴇs .
+┏━━━━━━━━━━━━━━━━━
+┣ ₪ *Uptime:* {}
+┣ ₪ {} *users, across* {}.*chats.*
+┗━━━━━━━━━━━━━━━━━
+➛ 𝐓ʀʏ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ ᴛᴏ ᴋɴᴏᴡ ᴍʏ 𝐀ʙɪ𝐋ɪ𝐓ɪᴇs ××
 """
-
 buttons = [
     [
         InlineKeyboardButton(
-            text=f"Add {BOT_NAME} To Your Group",
-            url=f"https://telegram.dog/{BOT_USERNAME}?startgroup=true",
+            text="🖤 𝐀ᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ 𝐆ʀᴏᴜᴘ 🥀", url=f"http://t.me/{BOT_USERNAME}?startgroup=true"
         )
     ],
     [
-        InlineKeyboardButton(text="📓 Guidelines", callback_data="help_back"),
+        InlineKeyboardButton(text="⚡ 𝐒ᴜᴘᴘᴏʀᴛ", url=f"t.me/{SUPPORT_CHAT}"),
         InlineKeyboardButton(
-            text="Source 🌐", url="https://github.com/Awesome-Prince/NekoRobot-3.git"
+            text="𝐔ᴘᴅᴀᴛᴇ𝐬🔸", url=f"t.me/{DONATION_LINK}"
         ),
     ],
     [
-        InlineKeyboardButton(
-            text="🚑 Support", url=f"https://telegram.dog/{SUPPORT_CHAT}"
-        ),
-        InlineKeyboardButton(
-            text="📢 Updates", url="https://telegram.dog/Programmer_Updates"
-        ),
+        InlineKeyboardButton(text="⚒️ 𝐀ʟʟ 𝐂ᴏᴍᴍᴀɴᴅ𝐬 ⚒️", callback_data="help_back"),
     ],
-]
 
 HELP_STRINGS = """
 *Main* commands available:
