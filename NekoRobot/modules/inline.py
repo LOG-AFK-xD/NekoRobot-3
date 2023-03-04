@@ -477,7 +477,7 @@ def media_query(query: str, update: Update, context: CallbackContext) -> None:
                 [
                     InlineKeyboardButton(
                         text="Report error",
-                        url="https://t.me/Besties_XD",
+                        url="https://t.me/team_bot_update",
                     ),
                     InlineKeyboardButton(
                         text="Search again",
