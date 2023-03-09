@@ -36,7 +36,7 @@ async def awake(event):
     NEKO = """
          We Are So Happy To Announce That We Have Private Our Bot Repo. ✨🥀
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
-「LOVELY_RO_BOT」
+「@LOVELY_RO_BOT」
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 Here is the Repo Deploy your Own NekoRobot.
 ⚜️Repo ➤ https://www.youtube.com/@harsh-shukla-xD
