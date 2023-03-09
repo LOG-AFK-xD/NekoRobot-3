@@ -28,7 +28,7 @@ async def proboyx(event):
     on = await bot.send_file(
         event.chat_id,
         file=file2,
-        caption=f"♡ Hey {betsy}, I'm Neko\n♡ I'm Created By [Prince](tg://user?id=1732814103)\n♡ Click The Button Below To Get Your Info",
+        caption=f"♡ Hey {betsy}, I'm Lovely\n♡ I'm Created By [Harsh](tg://user?id=5052969674)\n♡ Click The Button Below To Get Your Info",
         buttons=button,
     )
 
