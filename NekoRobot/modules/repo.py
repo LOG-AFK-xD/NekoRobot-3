@@ -38,7 +38,7 @@ async def awake(event):
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 「@LOVELY_RO_BOT」
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
-Here is the Repo Deploy your Own NekoRobot.
+Here is the My Youtube Channel Please Subscribe My Youtube Channel.
 ⚜️Repo ➤ https://www.youtube.com/@harsh-shukla-xD
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 🔰 Thanks for your support 
